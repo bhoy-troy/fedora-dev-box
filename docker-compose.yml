@@ -1,0 +1,19 @@
+
+services:
+  toolbox:
+    build:
+      context: ./rhel-developer-toolbox
+      dockerfile: ../images/Dockerfile.base
+      args:
+        RELEASE: latest
+    image: fedora-dev-toolbox:latest
+    container_name: fedora-dev-toolbox
+    stdin_open: true
+    tty: true
+    volumes:
+      - $HOME/Projects:/projects:rw
+      - $HOME/.local/share/containers/podman/machine/podman.sock:/run/podman/podman.sock:rw
+    working_dir: /projects/fedora-dev-box
+    command: /bin/bash
+    environment:
+      - TERM=xterm-256color
