@@ -1,0 +1,64 @@
+---
+# defaults file for dnf-packages role
+
+# Base development packages
+dnf_base_packages:
+  - ansible
+  - argbash
+  - beaker-client
+  - beaker-redhat
+  - bind-utils
+  - bison
+  - centos-packager
+  - centpkg
+  - csdiff
+  - csmock
+  - fedora-packager
+  - fedora-packager-kerberos
+  - flatpak-spawn
+  - flatpak-xdg-utils
+  - flex
+  - glib-networking
+  - git-subtree
+  - glab
+  - jq
+  - koji-osbuild-cli
+  - libvirt-client
+  - meld
+  - nano
+  - osh-client
+  - patchutils
+  - podman-remote
+  - powerline-go
+  - python3-click
+  - python3-libdnf5
+  - python3-jmespath
+  - python3-pip
+  - python3-pyyaml
+  - rhcopr
+  - rhel-packager
+  - rhel-repoquery
+  - rhelbz-components
+  - rpmdevtools
+  - scl-utils
+  - scl-utils-build
+  - skopeo
+  - tmt-all
+  - tmt-redhat-all
+  - vim
+  - virt-manager
+  - virt-viewer
+  - yamllint
+  - zsh
+
+# Additional packages (can be set in playbook vars)
+dnf_extra_packages: []
+
+# Packages to remove
+dnf_packages_to_remove:
+  - p11-kit-server
+
+# DNF options
+dnf_install_weak_deps: false
+dnf_upgrade_all: true
+dnf_clean_all: true

@@ -1,0 +1,14 @@
+---
+# defaults file for ldap role
+
+# LDAP configuration
+# NOTE: Override these in secrets.yml
+ldap_uri: "ldaps://s1.idm-001.prod.iad2.dc.redhat.com/ ldaps://s2.idm-001.prod.iad2.dc.redhat.com/ ldaps://s1.idm-001.prod.rdu2.dc.redhat.com/ ldaps://s2.idm-001.prod.rdu2.dc.redhat.com/"
+ldap_base: "dc=ipa,dc=redhat,dc=com"
+ldap_sasl_mech: "GSSAPI"
+ldap_sasl_nocanon: "on"
+ldap_tls_reqcert: "demand"
+
+# Dist-git bastion configuration
+# NOTE: Override in secrets.yml for your organization
+distgit_bastion_host: "bastion-iad2.corp.redhat.com"

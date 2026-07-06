@@ -1,0 +1,5 @@
+---
+# defaults file for tmux role
+
+# Install user-level config in addition to system config
+tmux_user_config: true

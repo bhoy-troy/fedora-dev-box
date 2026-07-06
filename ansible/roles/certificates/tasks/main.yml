@@ -1,0 +1,25 @@
+---
+# tasks file for certificates role
+
+- name: Install Red Hat IT Root CA certificates from content
+  ansible.builtin.copy:
+    content: "{{ item.value }}"
+    dest: "/etc/pki/ca-trust/source/anchors/{{ item.key }}"
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  loop: "{{ ca_certificates | dict2items }}"
+  when:
+    - ca_certificates is defined
+    - ca_certificates | length > 0
+  notify: Update CA trust
+  tags:
+    - all
+    - certificates
+
+- name: Flush handlers to update CA trust immediately
+  ansible.builtin.meta: flush_handlers
+  tags:
+    - all
+    - certificates

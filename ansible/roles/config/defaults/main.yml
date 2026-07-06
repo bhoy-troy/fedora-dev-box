@@ -1,0 +1,5 @@
+---
+# defaults file for config role
+
+# Directory for RHEL developer toolbox utilities
+rdtx_libexec_dir: /usr/libexec/rhel-developer-toolbox

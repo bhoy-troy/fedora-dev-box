@@ -1,0 +1,18 @@
+---
+# defaults file for certificates role
+
+# Dictionary of CA certificates to install
+# Key: Certificate filename
+# Value: Certificate content (PEM format)
+#
+# IMPORTANT: Define ca_certificates in secrets.yml with certificate content
+# Format:
+#   ca_certificates:
+#     filename.pem: |
+#       -----BEGIN CERTIFICATE-----
+#       ...
+#       -----END CERTIFICATE-----
+#
+# To disable certificate installation, set to empty dict:
+#   ca_certificates: {}
+ca_certificates: {}

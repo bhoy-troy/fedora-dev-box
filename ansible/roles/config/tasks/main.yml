@@ -1,0 +1,50 @@
+---
+# tasks file for config role
+
+- name: Deploy profile.d script for host command aliases
+  ansible.builtin.copy:
+    src: rhel_dev_toolbox.sh
+    dest: /etc/profile.d/rhel_dev_toolbox.sh
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+    - all
+    - config
+
+- name: Create rhel-developer-toolbox utility directory
+  ansible.builtin.file:
+    path: /usr/libexec/rhel-developer-toolbox
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  tags:
+    - all
+    - config
+
+- name: Deploy rdtx-check-config utility
+  ansible.builtin.copy:
+    src: rdtx-check-config.py
+    dest: /usr/libexec/rhel-developer-toolbox/rdtx-check-config
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  tags:
+    - all
+    - config
+
+- name: Deploy rdtx_bind_mounts utility
+  ansible.builtin.copy:
+    src: rdtx_bind_mounts.py
+    dest: /usr/libexec/rhel-developer-toolbox/rdtx_bind_mounts
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  tags:
+    - all
+    - config

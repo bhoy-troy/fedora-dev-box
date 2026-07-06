@@ -1,6 +1,3 @@
-
-
-
 ARG RELEASE=latest
 
 FROM quay.io/fedora/fedora-toolbox:$RELEASE
@@ -14,21 +11,6 @@ LABEL com.github.containers.toolbox="true" \
       version="$RELEASE" \
       summary="Container image for RHEL development built atop Fedora" \
       maintainer="James Troy <james@james-troy.com>"
-
-
-
-
-
-# Install the krb5.conf file
-COPY files/ipa_redhat_com /etc/krb5.conf.d/ipa_redhat_com
-
-
-
-#
-
-# Install dist-git bastion config & ldap lookup
-COPY --chmod=0444 files/00-distgit-bastion.conf /etc/ssh/ssh_config.d/
-COPY --chmod=0755 files/known-hosts-rh-ldap.sh /usr/local/bin/known-hosts-rh-ldap
 
 # Enable repositories and extra tools
 

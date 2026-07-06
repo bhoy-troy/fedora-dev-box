@@ -1,0 +1,65 @@
+---
+# tasks file for dnf-packages role
+
+- name: Install DNF plugins first
+  ansible.builtin.dnf:
+    name:
+      - dnf5-plugins
+      - libdnf5-plugin-actions
+    state: present
+  become: true
+  tags:
+    - all
+    - dnf
+
+- name: Install base development packages
+  ansible.builtin.dnf:
+    name: "{{ dnf_base_packages }}"
+    state: present
+    install_weak_deps: "{{ dnf_install_weak_deps }}"
+  become: true
+  when: dnf_base_packages | length > 0
+  tags:
+    - all
+    - dnf
+
+- name: Install extra packages
+  ansible.builtin.dnf:
+    name: "{{ dnf_extra_packages }}"
+    state: present
+    install_weak_deps: "{{ dnf_install_weak_deps }}"
+  become: true
+  when: dnf_extra_packages | length > 0
+  tags:
+    - all
+    - dnf
+
+- name: Remove unwanted packages
+  ansible.builtin.dnf:
+    name: "{{ dnf_packages_to_remove }}"
+    state: absent
+  become: true
+  when: dnf_packages_to_remove | length > 0
+  tags:
+    - all
+    - dnf
+
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+  become: true
+  when: dnf_upgrade_all | bool
+  tags:
+    - all
+    - dnf
+
+- name: Clean DNF cache
+  ansible.builtin.command:
+    cmd: dnf clean all
+  become: true
+  when: dnf_clean_all | bool
+  changed_when: true
+  tags:
+    - all
+    - dnf

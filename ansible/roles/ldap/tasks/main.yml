@@ -1,0 +1,50 @@
+---
+# tasks file for ldap role
+
+- name: Deploy LDAP client configuration
+  ansible.builtin.template:
+    src: ldap.conf.j2
+    dest: /etc/openldap/ldap.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+    - all
+    - ldap
+
+- name: Deploy Kerberos IPA configuration
+  ansible.builtin.copy:
+    src: ipa_redhat_com
+    dest: /etc/krb5.conf.d/ipa_redhat_com
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+    - all
+    - ldap
+
+- name: Deploy dist-git bastion SSH configuration
+  ansible.builtin.template:
+    src: 00-distgit-bastion.conf.j2
+    dest: /etc/ssh/ssh_config.d/00-distgit-bastion.conf
+    owner: root
+    group: root
+    mode: '0444'
+  become: true
+  tags:
+    - all
+    - ldap
+
+- name: Deploy known-hosts LDAP lookup script
+  ansible.builtin.copy:
+    src: known-hosts-rh-ldap.sh
+    dest: /usr/local/bin/known-hosts-rh-ldap
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  tags:
+    - all
+    - ldap

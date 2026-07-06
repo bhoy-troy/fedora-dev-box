@@ -1,0 +1,6 @@
+[local]
+localhost ansible_connection=local
+
+[all:vars]
+# These playbooks run inside the container
+ansible_connection=local

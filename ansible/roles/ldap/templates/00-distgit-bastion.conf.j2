@@ -1,0 +1,19 @@
+# NOTE : This file is managed by rhel-developer-toolbox
+#  https://redhat.gitlab.io/rhel/tools/rhel-developer-toolbox/
+
+# Bastion configuration for distgit
+#   https://spaces.redhat.com/x/2BPYKQ
+
+Host distgit-bastion
+   Hostname {{ distgit_bastion_host }}
+   GSSAPIAuthentication yes
+   KnownHostsCommand /usr/local/bin/known-hosts-rh-ldap %H
+   PreferredAuthentications gssapi-with-mic
+Host pkgs.devel.redhat.com
+   ProxyJump %r@distgit-bastion
+   GSSAPIAuthentication yes
+   KnownHostsCommand /usr/local/bin/known-hosts-rh-ldap %H
+Host pkgs-stage.devel.redhat.com
+   ProxyJump %r@distgit-bastion
+   GSSAPIAuthentication yes
+   KnownHostsCommand /usr/local/bin/known-hosts-rh-ldap %H
