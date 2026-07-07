@@ -32,3 +32,24 @@
   tags:
     - all
     - tmux
+
+- name: Configure tmux auto-attach in bashrc
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - tmux auto-attach"
+    block: |
+      if [[ -z "$TMUX" ]] ;then
+         ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+         if [[ -z "$ID" ]] ;then # if not available create a new one
+             tmux new-session
+         else
+             tmux attach-session -t "$ID" # if available attach to it
+         fi
+      fi
+    create: true
+    owner: "{{ ansible_facts['user_id'] }}"
+    mode: '0644'
+  when: tmux_auto_attach | default(true)
+  tags:
+    - all
+    - tmux

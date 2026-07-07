@@ -3,3 +3,7 @@
 
 # Install user-level config in addition to system config
 tmux_user_config: true
+
+# Auto-attach to tmux session in bashrc
+# Automatically creates or attaches to a tmux session when bash starts
+tmux_auto_attach: true
