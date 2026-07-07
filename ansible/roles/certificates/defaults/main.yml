@@ -4,15 +4,16 @@
 # Dictionary of CA certificates to install
 # Key: Certificate filename
 # Value: Certificate content (PEM format)
-#
-# IMPORTANT: Define ca_certificates in secrets.yml with certificate content
-# Format:
-#   ca_certificates:
-#     filename.pem: |
-#       -----BEGIN CERTIFICATE-----
-#       ...
-#       -----END CERTIFICATE-----
-#
+
+ca_certificates:
+  2022-IT-Root-CA.pem: |
+    -----BEGIN CERTIFICATE-----
+    Add 2022-IT-Root-CA.pem
+    -----END CERTIFICATE-----
+
+  2015-IT-Root-CA.pem: |
+    -----BEGIN CERTIFICATE-----
+    Add 2015-IT-Root-CA.pem
+    -----END CERTIFICATE-----
 # To disable certificate installation, set to empty dict:
 #   ca_certificates: {}
-ca_certificates: {}
