@@ -12,7 +12,7 @@ if [[ -z "$1" ]]; then
     exit 1
 fi
 
-LDAP_HOST=ldap://s2.idm-001.prod.rdu2.dc.redhat.com
+LDAP_HOST={{ ldap_host }}
 export TARGET_HOST=$1
 
 CACHE_DIR="/run/user/$(id -u)/ssh_host_cache"
