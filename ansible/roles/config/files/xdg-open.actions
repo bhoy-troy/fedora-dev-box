@@ -1,0 +1,1 @@
+post_transaction:*:::/usr/bin/sh -c if\ [[\ -e\ /usr/bin/xdg-open\ &&\ -e\ /usr/bin/flatpak-xdg-open\ ]];\ then\ ln\ -sf\ /usr/bin/flatpak-xdg-open\ /usr/bin/xdg-open;\ fi

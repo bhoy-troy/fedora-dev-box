@@ -48,3 +48,52 @@
   tags:
     - all
     - config
+
+- name: Create DNF actions directory
+  ansible.builtin.file:
+    path: /etc/dnf/libdnf5-plugins/actions.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  when: xdg_open_method == 'dnf-action'
+  tags:
+    - all
+    - config
+
+- name: Deploy xdg-open DNF action (redirect to flatpak-xdg-open)
+  ansible.builtin.copy:
+    src: xdg-open.actions
+    dest: /etc/dnf/libdnf5-plugins/actions.d/xdg-open.actions
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  when: xdg_open_method == 'dnf-action'
+  tags:
+    - all
+    - config
+
+- name: Set xdg-open to use flatpak-xdg-open via alternatives
+  community.general.alternatives:
+    name: xdg-open
+    path: /usr/bin/flatpak-xdg-open
+    link: /usr/local/bin/xdg-open
+    priority: 100
+  become: true
+  when: xdg_open_method == 'alternatives'
+  tags:
+    - all
+    - config
+
+- name: Create platform-python symlink for RHEL-8 kernel builds
+  ansible.builtin.file:
+    src: /usr/bin/python3
+    dest: /usr/libexec/platform-python
+    state: link
+    force: true
+  become: true
+  tags:
+    - all
+    - config

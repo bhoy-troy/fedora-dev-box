@@ -3,3 +3,10 @@
 
 # Directory for RHEL developer toolbox utilities
 rdtx_libexec_dir: /usr/libexec/rhel-developer-toolbox
+
+# XDG-open configuration method
+# Options:
+#   'alternatives' - Use alternatives system (recommended)
+#   'dnf-action'   - Use DNF action to redirect (original hack)
+#   'none'         - Don't configure xdg-open
+xdg_open_method: 'alternatives'
