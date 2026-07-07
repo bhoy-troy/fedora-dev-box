@@ -19,18 +19,8 @@ if [ -r /run/.containerenv ]; then
       fi
     done
 
-    localvars_path=$HOME/.config/rhel-developer-toolbox/ansible/localvars.yaml
-    if test ! -e /tmp/rdtbx_${id}; then
-      if /usr/libexec/rhel-developer-toolbox/rdtx-check-config --localvarspath=$localvars_path autoconfigure; then
-        # Run the configuration Ansible playbook
-        /usr/local/bin/rdtx-apply-config || true
-      fi
-
-      # Run only once per host boot. The /tmp path will be removed
-      # automatically upon reboot, since it's a tmpfs mount point.
-      # The ${id} variable is unique for each container instance.
-      touch /tmp/rdtbx_${id}
-    fi
+    # Note: Removed rdtx-apply-config autoconfigure
+    # Use Ansible playbooks directly: ansible-playbook /projects/fedora-dev-box/setup-all.yml
   )
 fi
 

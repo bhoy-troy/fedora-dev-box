@@ -12,74 +12,26 @@ LABEL com.github.containers.toolbox="true" \
       summary="Container image for RHEL development built atop Fedora" \
       maintainer="James Troy <james@james-troy.com>"
 
+RUN dnf --assumeyes install ansible
+
+
 # Enable repositories and extra tools
 
 # NOTE(ianw) 2025-06 : it's unclear if this reamins supported; see discussion at
 #  https://gitlab.com/redhat/rhel/tools/rhel-developer-toolbox/-/merge_requests/132#note_2505802571
 # RUN dnf config-manager addrepo --from-repofile http://download.devel.redhat.com/beakerrepos/beaker-client-Fedora.repo
 
-# For complicated reasons related to the Gitlab Runner networking setup,
-# we need to install a modified version of the repository file that uses
-# HTTP instead of HTTPS.
-COPY files/RPM-GPG-KEY-rcminternal /etc/pki/rpm-gpg/RPM-GPG-KEY-rcminternal
-COPY files/rcm-tools-fedora.repo /etc/yum.repos.d/rcm-tools-fedora.repo
 
-# Install a set of COPR repositories that provide useful tools for RHEL
-# and Fedora development.
-RUN \
- dnf --assumeyes copr enable copr.devel.redhat.com/@osh/osh-prod && \
- dnf --assumeyes copr enable copr.devel.redhat.com/lpol/qa-tools && \
- dnf --assumeyes copr enable copr.devel.redhat.com/rhcopr-project/toolset && \
- dnf --assumeyes copr enable copr.devel.redhat.com/@kernel-maintainers/beaker-redhat && \
- dnf --assumeyes copr enable copr.devel.redhat.com/petersen/rhel-repoquery && \
- dnf --assumeyes copr enable copr.devel.redhat.com/petersen/rhelbz-components && \
- dnf --assumeyes copr enable sgallagh/dev-toolbox-extras
-
-
-# NOTE(ianw) 2025-09 This is a hack so that xdg-open calls via dbus to
-# open things in the host.  It's not exactly clear the best way to go
-# here; xdg-open itself seems to look for
-# $XDG_RUNTIME_DIR/flatpak-info and, if found, calls via dbus [1], but
-# it remains unclear how to integrate that behaviour with the toolbox
-# [2].  This dnf action will ensure a redirect of /usr/bin/xdg-open to
-# /usr/bin/flatpak-xdg-open until we find a better solution.
-#
-# [1] https://slatecave.net/blog/xdg-open-under-the-hood/
-# [2] https://github.com/containers/toolbox/issues/291
-COPY files/xdg-open.actions /etc/dnf/libdnf5-plugins/actions.d/xdg-open.actions
-
-# Install and cleanup dnf in a single layer (ensure plugins are available first)
-# 2025-08-28: Remove p11-kit-server to avoid
-# https://github.com/p11-glue/p11-kit/issues/692
-RUN dnf --assumeyes install \
-       dnf5-plugins \
-       libdnf5-plugin-actions
- && dnf --assumeyes remove p11-kit-server \
- && dnf --assumeyes upgrade \
- && dnf --assumeyes clean all
 
 # This is a hack so that modern systems can build RHEL-8 kernel sources
 RUN ln -s /usr/bin/python3 /usr/libexec/platform-python
 
 # Install Ansible setup
 
+COPY ansible /usr/share/rhel-dev-toolbox/ansible/
+
 # Unfortunately gitlab CI seems to run with umask 000 so we get
 # directories in the local checkout as 777 ... hence we need to
 # cleanup permissions when copying directory hierarchies
-COPY files/configure-rhel-dev-toolbox /usr/local/bin/configure-rhel-dev-toolbox
-COPY files/toolbox-upgrade.sh /usr/local/bin/toolbox-upgrade
-COPY files/rdtx-apply-config.tpl /usr/share/rhel-dev-toolbox/rdtx-apply-config.tpl
-COPY files/rdtx-edit-config.tpl /usr/share/rhel-dev-toolbox/rdtx-edit-config.tpl
-COPY files/rdtx-upgrade.tpl /usr/share/rhel-dev-toolbox/rdtx-upgrade.tpl
-RUN argbash /usr/share/rhel-dev-toolbox/rdtx-apply-config.tpl --output /usr/local/bin/rdtx-apply-config && \
-  argbash /usr/share/rhel-dev-toolbox/rdtx-edit-config.tpl --output /usr/local/bin/rdtx-edit-config && \
-  argbash /usr/share/rhel-dev-toolbox/rdtx-upgrade.tpl --output /usr/local/bin/rdtx-upgrade && \
-  mkdir -p /usr/share/rhel-dev-toolbox/ansible && \
-  chmod -R 0755 /usr/share/rhel-dev-toolbox
-COPY ansible /usr/share/rhel-dev-toolbox/ansible/
-RUN chmod -R u+rwX,go+rX,go-w /usr/share/rhel-dev-toolbox \
-  && chmod 0755 /usr/local/bin/rdtx-apply-config \
-  && chmod 0755 /usr/local/bin/rdtx-edit-config \
-  && chmod 0755 /usr/local/bin/rdtx-upgrade \
-  && chmod 0755 /usr/local/bin/configure-rhel-dev-toolbox \
-  && chmod 0755 /usr/local/bin/toolbox-upgrade
+RUN mkdir -p /usr/share/rhel-dev-toolbox/ansible && \
+  chmod -R u+rwX,go+rX,go-w /usr/share/rhel-dev-toolbox

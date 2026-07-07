@@ -17,6 +17,8 @@ This role sets up essential system configuration files for the RHEL Developer To
 3. **XDG-open configuration**
    - Redirects xdg-open to use flatpak-xdg-open for host integration
    - Supports alternatives or DNF action methods
+   - **Note:** Requires `flatpak-xdg-utils` package (installed by dnf-packages role)
+   - If packages aren't installed yet, this will be skipped (run playbook again after packages are installed)
 
 4. **Platform Python symlink** (`/usr/libexec/platform-python`)
    - Compatibility symlink for building RHEL-8 kernel sources on modern systems

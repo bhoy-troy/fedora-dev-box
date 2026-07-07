@@ -1,0 +1,18 @@
+---
+- name: Complete development environment setup
+  hosts: all
+  gather_facts: true
+
+  roles:
+    # Install repositories first
+    - role: certificates
+    - role: rcm-tools
+    - role: copr-repos
+
+    # Install packages (provides flatpak-xdg-utils for xdg-open configuration)
+    - role: dnf-packages
+
+    # Configure system (requires packages to be installed)
+    - role: ldap
+    - role: config
+    - role: tmux

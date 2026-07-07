@@ -13,6 +13,7 @@ services:
     volumes:
       - $HOME/Projects:/projects:rw
       - $HOME/.local/share/containers/podman/machine/podman.sock:/run/podman/podman.sock:rw
+      - "$HOME/Library/Application Support/Viscosity/OpenVPN:/vpn-configs:ro"
     working_dir: /projects/fedora-dev-box
     command: /bin/bash
     environment:

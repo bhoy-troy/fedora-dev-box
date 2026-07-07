@@ -75,6 +75,15 @@
     - all
     - config
 
+- name: Check if flatpak-xdg-open exists
+  ansible.builtin.stat:
+    path: /usr/bin/flatpak-xdg-open
+  register: flatpak_xdg_open_stat
+  when: xdg_open_method == 'alternatives'
+  tags:
+    - all
+    - config
+
 - name: Set xdg-open to use flatpak-xdg-open via alternatives
   community.general.alternatives:
     name: xdg-open
@@ -82,7 +91,9 @@
     link: /usr/local/bin/xdg-open
     priority: 100
   become: true
-  when: xdg_open_method == 'alternatives'
+  when:
+    - xdg_open_method == 'alternatives'
+    - flatpak_xdg_open_stat.stat.exists | default(false)
   tags:
     - all
     - config
