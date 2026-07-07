@@ -1,0 +1,8 @@
+---
+# defaults file for copr-repos role
+
+# List of COPR repositories to enable
+# Format: "host/owner/project" or "owner/project" (defaults to copr.fedorainfracloud.org)
+# NOTE: Override this in secrets.yml with your organization's repositories
+copr_repositories: []
+

@@ -1,0 +1,17 @@
+---
+# tasks file for copr-repos role
+
+- name: Enable COPR repositories
+  ansible.builtin.command:
+    cmd: "dnf --assumeyes copr enable {{ item }}"
+  become: true
+  loop: "{{ copr_repositories }}"
+  when: copr_repositories | length > 0
+  register: copr_enable_result
+  changed_when: "'already enabled' not in copr_enable_result.stdout"
+  failed_when:
+    - copr_enable_result.rc != 0
+    - "'already enabled' not in copr_enable_result.stdout"
+  tags:
+    - all
+    - copr-repos
