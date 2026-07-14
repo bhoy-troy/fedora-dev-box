@@ -12,7 +12,7 @@ LABEL com.github.containers.toolbox="true" \
       summary="Container image for RHEL development built atop Fedora" \
       maintainer="James Troy <james@james-troy.com>"
 
-RUN dnf --assumeyes install ansible
+RUN dnf --assumeyes install ansible cowsay
 
 
 # Enable repositories and extra tools
