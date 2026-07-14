@@ -14,8 +14,27 @@ docker-compose exec toolbox bash
 
 # Inside container: Run Ansible to configure environment
 cd /projects/fedora-dev-box
+ANSIBLE_VAULT_PASSWORD_FILE=.vault_pass 
 ansible-playbook setup-all.yml --extra-vars @ansible/secrets.yml
 ```
+
+##### There are multiple ways to use the vault password 
+
+__Ask for it to be input__
+
+    ansible-playbook setup-all.yml --extra-vars @ansible/secrets.yml --ask-vault-pass
+
+__set env var__
+
+    ANSIBLE_VAULT_PASSWORD_FILE=.vault_pass ansible-playbook setup-all.yml --extra-vars @ansible/secrets.yml
+
+__Add  `vault_password_file` to .ansible.cfg__
+
+    [defaults]
+    roles_path = ./ansible/roles
+    inventory = ./ansible/inventory
+    vault_password_file = .vault_pass
+
 
 ## What This Provides
 
@@ -23,17 +42,6 @@ ansible-playbook setup-all.yml --extra-vars @ansible/secrets.yml
 - **Ansible roles** for environment configuration (tmux, packages, etc.)
 - **Host Podman integration** via shared socket
 - **Red Hat internal configs** (certificates, Kerberos, LDAP, COPR repos)
-
-## Ansible Playbooks (Run Inside Container)
-
-```bash
-# Complete setup (recommended)
-ansible-playbook setup-all.yml
-
-# Individual components
-ansible-playbook setup-tmux.yml        # Tmux configuration
-ansible-playbook setup-packages.yml    # Development packages
-```
 
  
 ## Key Features
