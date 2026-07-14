@@ -1,0 +1,26 @@
+---
+# tasks file for rcm-tools role
+
+- name: Deploy RCM Tools GPG key
+  ansible.builtin.copy:
+    content: "{{ rcm_tools_gpg_key }}"
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-rcminternal
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+    - all
+    - rcm-tools
+
+- name: Deploy RCM Tools repository configuration
+  ansible.builtin.template:
+    src: rcm-tools-fedora.repo.j2
+    dest: /etc/yum.repos.d/rcm-tools-fedora.repo
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+    - all
+    - rcm-tools

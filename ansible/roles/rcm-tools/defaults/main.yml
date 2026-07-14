@@ -1,0 +1,16 @@
+---
+# defaults file for rcm-tools role
+
+# RCM Tools repository is enabled by default
+rcm_tools_enabled: true
+
+# RCM Tools repository base URL
+# NOTE: Override in secrets.yml for your organization
+rcm_tools_baseurl: "https://example.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-F-$releasever/compose/Everything/$basearch/os/"
+
+# RCM Tools GPG key content
+# NOTE: Override in secrets.yml with your organization's GPG key
+rcm_tools_gpg_key: |
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+  Example GPG key - replace with actual key in secrets.yml
+  -----END PGP PUBLIC KEY BLOCK-----
