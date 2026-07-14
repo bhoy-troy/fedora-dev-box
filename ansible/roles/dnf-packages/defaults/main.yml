@@ -13,6 +13,7 @@ dnf_base_packages:
   - centpkg
   - csdiff
   - csmock
+#  - dnf5-plugins
   - fedora-packager
   - fedora-packager-kerberos
   - flatpak-spawn
@@ -24,6 +25,7 @@ dnf_base_packages:
   - jq
   - koji-osbuild-cli
   - libvirt-client
+#  - libdnf5-plugin-actions
   - meld
   - nano
   - osh-client

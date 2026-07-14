@@ -2,8 +2,8 @@
 services:
   toolbox:
     build:
-      context: ./rhel-developer-toolbox
-      dockerfile: ../images/Dockerfile.base
+      context: ./images
+      dockerfile: Dockerfile.base
       args:
         RELEASE: latest
     image: fedora-dev-toolbox:latest
