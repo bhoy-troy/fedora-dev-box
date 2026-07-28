@@ -14,6 +14,19 @@ LABEL com.github.containers.toolbox="true" \
 
 RUN dnf --assumeyes install ansible cowsay
 
+# Install Java (required for sonar-scanner), unzip, and wget
+RUN dnf --assumeyes install java-17-openjdk-headless unzip wget
+
+# Install sonar-scanner
+RUN wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip && \
+    unzip -q sonar-scanner-cli-5.0.1.3006-linux.zip && \
+    mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner && \
+    ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner && \
+    rm sonar-scanner-cli-5.0.1.3006-linux.zip
+
+# Install CodeClimate CLI
+RUN wget -qO /usr/local/bin/codeclimate https://github.com/codeclimate/codeclimate/releases/download/v0.94.1/codeclimate-0.94.1-linux-amd64 && \
+    chmod +x /usr/local/bin/codeclimate
 
 # Enable repositories and extra tools
 
