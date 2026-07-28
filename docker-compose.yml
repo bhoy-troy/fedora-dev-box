@@ -12,10 +12,36 @@ services:
     tty: true
     volumes:
       - $HOME/Projects:/projects:rw
-      - $HOME/.local/share/containers/podman/machine/podman.sock:/run/podman/podman.sock:rw
       - "$HOME/Library/Application Support/Viscosity/OpenVPN:/vpn-configs:ro"
     working_dir: /projects/fedora-dev-box
     command: /bin/bash
     environment:
       - ANSIBLE_VAULT_PASSWORD_FILE=.vault_pass
       - TERM=xterm-256color
+    networks:
+      - sonar-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: sonarqube-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sonar
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+    volumes:
+      - sonarqube_postgresql_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sonar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sonar-network
+
+networks:
+  sonar-network:
+    driver: bridge
+
+volumes:
+  sonarqube_postgresql_data:
