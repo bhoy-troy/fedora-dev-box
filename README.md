@@ -42,6 +42,7 @@ __Add  `vault_password_file` to .ansible.cfg__
 - **Ansible roles** for environment configuration (tmux, packages, etc.)
 - **Host Podman integration** via shared socket
 - **Red Hat internal configs** (certificates, Kerberos, LDAP, COPR repos)
+- **Code quality tools** (SonarQube, PostgreSQL, sonar-scanner, qlty/CodeClimate)
 
  
 ## Key Features
@@ -50,7 +51,9 @@ __Add  `vault_password_file` to .ansible.cfg__
 ✅ Ansible-based configuration (modify and re-run without rebuilding)  
 ✅ Host Podman socket shared (no nested containers)  
 ✅ Project directory mounted at `/projects`  
-✅ 45+ packages: fedpkg, rhpkg, beaker, tmt, koji, podman-remote, etc.
+✅ 45+ packages: fedpkg, rhpkg, beaker, tmt, koji, podman-remote, etc.  
+✅ SonarQube for code quality analysis (web UI on port 9000)  
+✅ sonar-scanner and qlty (CodeClimate alternative) CLI tools
 
 ## Requirements
 
