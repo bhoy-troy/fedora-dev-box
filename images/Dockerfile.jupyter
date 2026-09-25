@@ -1,0 +1,35 @@
+ARG BASE_IMAGE=fedora-dev-toolbox:latest
+FROM ${BASE_IMAGE}
+
+RUN dnf -y install \
+        python3-pip \
+        wget \
+        krb5-devel \
+        gcc \
+        python3-devel \
+        --setopt=tsflags=nodocs \
+        --setopt=install_weak_deps=False && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Create a non-root user for JupyterLab
+# RUN useradd --create-home --shell /bin/bash jupyter
+
+# USER jupyter
+WORKDIR  /jupyter
+
+
+COPY requirements.txt .
+COPY requirements.notebook.txt .
+# Install JupyterLab as the jupyter user
+RUN pip install -r requirements.notebook.txt
+
+# Ensure user-installed binaries are on PATH
+ENV PATH="/root/.local/bin:${PATH}"
+
+COPY   images/entrypoint.jupyter.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+EXPOSE 8888
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
