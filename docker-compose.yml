@@ -1,4 +1,5 @@
 
+#  podman-machine-default       ssh://core@127.0.0.1:49928/run/user/501/podman/podman.sock  /Users/jatroy/.local/share/containers/podman/machine/machine  false       true
 
 x-s3-env: &s3-env
   FLOCI_HOSTNAME: devbox-s3
@@ -108,6 +109,58 @@ services:
 
     security_opt:
       - label=disable
+
+
+  devbox-s3:
+    image: floci/floci:latest
+    container_name: devbox-s3
+    hostname: devbox-s3
+    ports:
+      - "4566:4566"
+    environment:
+      - FLOCI_HOSTNAME=devbox-s3
+      - FLOCI_STORAGE_MODE=persistent
+      - FLOCI_STORAGE_PERSISTENT_PAT=/app/data
+      - FLOKI_DEFAULT_REGION=${AWS_DEFAULT_REGION:-eu-central-1}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-eu-central-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-aws-access-key-id}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-aws-secret-access-key}
+    volumes:
+      - ./floci-data:/var/lib/floci
+    networks:
+      - sonar-network
+
+
+  worker:
+    image: fedora-dev-toolbox:latest
+    container_name: fedora-dev-worker
+    hostname: fedora-dev-worker
+    stdin_open: true
+    tty: true
+    volumes:
+      - $HOME/Projects:/projects:rw
+      - "$HOME/Library/Application Support/Viscosity/OpenVPN:/vpn-configs:ro"
+    working_dir: /projects/fedora-dev-box
+    command:
+      - sh
+      - -c
+      - |
+        (aws s3api head-bucket --bucket content-resolver 2>/dev/null || aws s3 mb s3://content-resolver) \
+        && ansible-playbook setup-all.yml --extra-vars @ansible/secrets.yml
+    environment:
+      - ANSIBLE_VAULT_PASSWORD_FILE=.vault_pass
+      - AWS_ENDPOINT_URL=http://devbox-s3:4566
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-eu-central-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-aws-access-key-id}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-aws-secret-access-key}
+    depends_on:
+      - toolbox
+      - devbox-s3
+
+    networks:
+      - sonar-network
+
+
 networks:
   sonar-network:
     driver: bridge

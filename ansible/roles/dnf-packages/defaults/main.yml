@@ -30,6 +30,7 @@ dnf_base_packages:
   - nano
   - osh-client
   - patchutils
+  - podman-docker
   - podman-remote
   - powerline-go
   - python3-click

@@ -12,10 +12,10 @@ LABEL com.github.containers.toolbox="true" \
       summary="Container image for RHEL development built atop Fedora" \
       maintainer="James Troy <james@james-troy.com>"
 
-RUN dnf --assumeyes install ansible cowsay
+RUN dnf --assumeyes install ansible cowsay python3-pip
 
 # Install Java (required for sonar-scanner), unzip, and wget
-RUN dnf --assumeyes install java-25-openjdk-headless unzip wget
+RUN dnf --assumeyes install java-25-openjdk-headless unzip wget curl
 
 # Install sonar-scanner
 RUN wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip && \
@@ -50,6 +50,7 @@ RUN ARCH=$(uname -m) && \
 # RUN dnf config-manager addrepo --from-repofile http://download.devel.redhat.com/beakerrepos/beaker-client-Fedora.repo
 
 
+RUN  curl -fsSL https://awscli.amazonaws.com/v2/install.sh | bash -s -- --system
 
 # This is a hack so that modern systems can build RHEL-8 kernel sources
 RUN ln -s /usr/bin/python3 /usr/libexec/platform-python
